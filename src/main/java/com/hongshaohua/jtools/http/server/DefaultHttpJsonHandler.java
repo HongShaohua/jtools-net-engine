@@ -49,6 +49,7 @@ public abstract class DefaultHttpJsonHandler<REQUEST_DATA, RESPONSE_DATA> extend
 
     protected REQUEST_DATA getRequestData(FullHttpRequest request) throws Exception {
         String content = this.getContentFromRequest(request);
+        System.out.println("request content : " + content);
         return str2RequestData(content);
     }
 
@@ -71,8 +72,8 @@ public abstract class DefaultHttpJsonHandler<REQUEST_DATA, RESPONSE_DATA> extend
         try {
             requestData = this.getRequestData(request);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return this.createResponse(HttpResponseStatus.BAD_REQUEST);
+            logger.error("request format error : " + e.getMessage());
+            return this.createResponse(HttpResponseStatus.BAD_REQUEST, "request format error");
         }
         RESPONSE_DATA responseData = this.handle(ctx, request, requestData);
         return this.getResponse(responseData);
