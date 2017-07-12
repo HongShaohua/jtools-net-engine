@@ -59,19 +59,19 @@ public class DefaultHttpHandlerMap extends DefaultHttpHandler {
     }
 
     public FullHttpResponse handlerNotFound(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
-        return new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND);
+        return this.createResponse(HttpResponseStatus.NOT_FOUND);
     }
 
     @Override
     protected void handleProcess(ChannelHandlerContext ctx, FullHttpRequest request, String uri) throws Exception {
         UriPart uriPart = this.parseUri(uri);
         if(uriPart == null) {
-            this.write(ctx, request, this.handlerNotFound(ctx, request));
+            this.write(ctx, this.handlerNotFound(ctx, request));
             return;
         }
         DefaultHttpHandler handler = this.handlerMap.get(uriPart.name);
         if(handler == null) {
-            this.write(ctx, request, this.handlerNotFound(ctx, request));
+            this.write(ctx, this.handlerNotFound(ctx, request));
             return;
         }
         handler.handleProcess(ctx, request, uriPart.subUri);

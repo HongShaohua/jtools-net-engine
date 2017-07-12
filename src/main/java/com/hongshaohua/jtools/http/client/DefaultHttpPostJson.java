@@ -28,7 +28,7 @@ public class DefaultHttpPostJson<REQUEST_DATA, RESPONSE_DATA> extends DefaultHtt
     @SuppressWarnings("unchecked")
     private void init() {
         this.requestDataClass = (Class<REQUEST_DATA>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        this.responseDataClass = (Class<RESPONSE_DATA>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.responseDataClass = (Class<RESPONSE_DATA>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
     protected REQUEST_DATA str2RequestData(String str) throws Exception {
@@ -52,6 +52,7 @@ public class DefaultHttpPostJson<REQUEST_DATA, RESPONSE_DATA> extends DefaultHtt
     }
 
     public void requestData(REQUEST_DATA requestData) throws Exception {
+        this.requestData = requestData;
         this.requestContent(requestData2Str(requestData));
     }
 

@@ -2,14 +2,10 @@ package com.hongshaohua.jtools.http.server;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
 
 public class HttpServerInboundHandler extends ChannelInboundHandlerAdapter {
-
-	private final static Logger logger = LoggerFactory.getLogger(HttpServerInboundHandler.class);
 	
 	private ChannelReadHandler channelReadHandler;
 	
@@ -26,7 +22,7 @@ public class HttpServerInboundHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
 			throws Exception {
-		logger.error(cause.getMessage(), cause);
 		super.exceptionCaught(ctx, cause);
+		channelReadHandler.exceptionCaught(ctx, cause);
 	}
 }

@@ -28,7 +28,7 @@ public abstract class DefaultHttpJsonHandler<REQUEST_DATA, RESPONSE_DATA> extend
     @SuppressWarnings("unchecked")
     private void init() {
         this.requestDataClass = (Class<REQUEST_DATA>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        this.responseDataClass = (Class<RESPONSE_DATA>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.responseDataClass = (Class<RESPONSE_DATA>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
     protected REQUEST_DATA str2RequestData(String str) throws Exception {

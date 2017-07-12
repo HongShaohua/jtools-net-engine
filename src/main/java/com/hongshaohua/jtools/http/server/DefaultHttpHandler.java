@@ -4,11 +4,15 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Aska on 2017/6/15.
  */
 public abstract class DefaultHttpHandler implements ChannelReadHandler {
+
+    private final static Logger logger = LoggerFactory.getLogger(DefaultHttpHandler.class);
 
     private String name;
 
@@ -52,13 +56,13 @@ public abstract class DefaultHttpHandler implements ChannelReadHandler {
     }
 
     protected FullHttpResponse createResponse(String res) throws Exception {
-        return createResponse(HttpResponseStatus.OK, res);
+        return this.createResponse(HttpResponseStatus.OK, res);
     }
 
     protected FullHttpResponse createResponse(HttpResponseStatus status) throws Exception {
-        return new DefaultFullHttpResponse(
-                HttpVersion.HTTP_1_1,
-                status);
+        return this.createResponse(
+                status,
+                "");
     }
 
     protected void beforeHandle(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
@@ -71,7 +75,7 @@ public abstract class DefaultHttpHandler implements ChannelReadHandler {
         return response;
     }
 
-    protected void write(ChannelHandlerContext ctx, FullHttpRequest request, FullHttpResponse response) throws Exception {
+    protected void write(ChannelHandlerContext ctx, FullHttpResponse response) throws Exception {
         ctx.writeAndFlush(response);
     }
 
@@ -79,12 +83,27 @@ public abstract class DefaultHttpHandler implements ChannelReadHandler {
         this.beforeHandle(ctx, request);
         FullHttpResponse response = this.handle(ctx, request);
         response = this.afterHandle(ctx, request, response);
-        this.write(ctx, request, response);
+        this.write(ctx, response);
     }
 
     @Override
-    public void handle(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void handle(ChannelHandlerContext ctx, Object msg) {
         FullHttpRequest request = (FullHttpRequest)msg;
-        this.handleProcess(ctx, request, request.uri());
+        try {
+            this.handleProcess(ctx, request, request.uri());
+        } catch (Exception e) {
+            this.exceptionCaught(ctx, e);
+        }
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        logger.error(cause.getMessage(), cause);
+        try {
+            FullHttpResponse response = this.createResponse(HttpResponseStatus.BAD_REQUEST);
+            this.write(ctx, response);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 }

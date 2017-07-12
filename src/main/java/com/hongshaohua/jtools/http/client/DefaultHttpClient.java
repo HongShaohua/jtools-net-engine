@@ -2,6 +2,7 @@ package com.hongshaohua.jtools.http.client;
 
 import org.apache.http.Header;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -16,6 +17,7 @@ public class DefaultHttpClient extends HttpClientEx {
     private int connectionCount = 0;
     private List<Header> headers = null;
     private CookieStore cookieStore;
+    private RequestConfig requestConfig;
 
     public DefaultHttpClient() {
 
@@ -45,6 +47,14 @@ public class DefaultHttpClient extends HttpClientEx {
         this.cookieStore = cookieStore;
     }
 
+    public RequestConfig getRequestConfig() {
+        return requestConfig;
+    }
+
+    public void setRequestConfig(RequestConfig requestConfig) {
+        this.requestConfig = requestConfig;
+    }
+
     @Override
     public boolean open(HttpClientBuilder builder) {
         return super.open(builder);
@@ -67,6 +77,9 @@ public class DefaultHttpClient extends HttpClientEx {
         }
         if(this.cookieStore != null) {
             httpClientBuilder = httpClientBuilder.setDefaultCookieStore(cookieStore);
+        }
+        if(this.requestConfig != null) {
+            httpClientBuilder = httpClientBuilder.setDefaultRequestConfig(this.requestConfig);
         }
         return this.open(httpClientBuilder);
     }
