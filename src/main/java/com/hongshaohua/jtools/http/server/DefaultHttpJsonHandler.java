@@ -53,7 +53,7 @@ public abstract class DefaultHttpJsonHandler<REQUEST_DATA, RESPONSE_DATA> extend
         return str2RequestData(content);
     }
 
-    protected abstract RESPONSE_DATA handle(ChannelHandlerContext ctx, FullHttpRequest request, REQUEST_DATA requestData) throws Exception;
+    protected abstract RESPONSE_DATA handle(ChannelHandlerContext ctx, FullHttpRequest request, REQUEST_DATA request_data) throws Exception;
 
     protected FullHttpResponse getResponse(RESPONSE_DATA responseData) throws Exception {
         if(responseData == null) {
