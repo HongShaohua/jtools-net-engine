@@ -16,13 +16,12 @@ public class HttpServerInboundHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
-		channelReadHandler.handle(ctx, msg);
+		channelReadHandler.channelRead(ctx, msg);
 	}
 	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
 			throws Exception {
 		super.exceptionCaught(ctx, cause);
-		channelReadHandler.exceptionCaught(ctx, cause);
 	}
 }

@@ -13,14 +13,14 @@ import java.lang.reflect.ParameterizedType;
 /**
  * Created by shaoh on 2017/5/3.
  */
-public abstract class DefaultHttpJsonHandler<REQUEST_DATA, RESPONSE_DATA> extends DefaultHttpHandler {
+public abstract class DefaultHttpHandlerJson<REQUEST_DATA, RESPONSE_DATA> extends DefaultHttpHandler {
 
-    private final static Logger logger = LoggerFactory.getLogger(DefaultHttpJsonHandler.class);
+    private final static Logger logger = LoggerFactory.getLogger(DefaultHttpHandlerJson.class);
 
     private Class<REQUEST_DATA> requestDataClass;
     private Class<RESPONSE_DATA> responseDataClass;
 
-    public DefaultHttpJsonHandler(String name) {
+    public DefaultHttpHandlerJson(String name) {
         super(name);
         this.init();
     }

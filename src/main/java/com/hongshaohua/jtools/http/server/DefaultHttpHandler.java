@@ -24,14 +24,6 @@ public abstract class DefaultHttpHandler implements ChannelReadHandler {
         return name;
     }
 
-    protected String getContentFromRequest(FullHttpRequest request) throws Exception {
-        return request.content().toString(CharsetUtil.UTF_8);
-    }
-
-    protected String getOriginalIp(FullHttpRequest request) throws Exception {
-        return request.headers().get("ORIGINAL-IP");
-    }
-
     protected String getIp(ChannelHandlerContext ctx) throws Exception {
         String str = ctx.channel().remoteAddress().toString();
         int index = str.indexOf("/");
@@ -43,6 +35,14 @@ public abstract class DefaultHttpHandler implements ChannelReadHandler {
             str = str.substring(0, index);
         }
         return str;
+    }
+
+    protected String getOriginalIpFromRequest(FullHttpRequest request) throws Exception {
+        return request.headers().get("ORIGINAL-IP");
+    }
+
+    protected String getContentFromRequest(FullHttpRequest request) throws Exception {
+        return request.content().toString(CharsetUtil.UTF_8);
     }
 
     protected FullHttpResponse createResponse(HttpResponseStatus status, String content) throws Exception {
@@ -65,45 +65,48 @@ public abstract class DefaultHttpHandler implements ChannelReadHandler {
                 "");
     }
 
-    protected void beforeHandle(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
+    protected void handleBefore(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
 
     }
 
     protected abstract FullHttpResponse handle(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception;
 
-    protected FullHttpResponse afterHandle(ChannelHandlerContext ctx, FullHttpRequest request, FullHttpResponse response) throws Exception {
-        return response;
+    protected void handleAfter(ChannelHandlerContext ctx, FullHttpRequest request, FullHttpResponse response) throws Exception {
+
     }
 
-    protected void write(ChannelHandlerContext ctx, FullHttpResponse response) throws Exception {
+    protected void writeResponse(ChannelHandlerContext ctx, FullHttpResponse response) throws Exception {
         ctx.writeAndFlush(response);
     }
 
-    protected void handleProcess(ChannelHandlerContext ctx, FullHttpRequest request, String uri) throws Exception {
-        this.beforeHandle(ctx, request);
+    protected void handleProcess(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
+        this.handleBefore(ctx, request);
         FullHttpResponse response = this.handle(ctx, request);
-        response = this.afterHandle(ctx, request, response);
-        this.write(ctx, response);
+        this.handleAfter(ctx, request, response);
+        this.writeResponse(ctx, response);
     }
 
-    @Override
-    public void handle(ChannelHandlerContext ctx, Object msg) {
-        FullHttpRequest request = (FullHttpRequest)msg;
+    protected void handleMap(ChannelHandlerContext ctx, FullHttpRequest request, String uri) throws Exception {
+        this.handleProcess(ctx, request);
+    }
+
+    protected void exception(ChannelHandlerContext ctx, Throwable cause) {
+        logger.error(cause.getMessage(), cause);
         try {
-            this.handleProcess(ctx, request, request.uri());
+            FullHttpResponse response = this.createResponse(HttpResponseStatus.BAD_REQUEST);
+            this.writeResponse(ctx, response);
         } catch (Exception e) {
-            this.exceptionCaught(ctx, e);
+            logger.error(e.getMessage(), e);
         }
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        logger.error(cause.getMessage(), cause);
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         try {
-            FullHttpResponse response = this.createResponse(HttpResponseStatus.BAD_REQUEST);
-            this.write(ctx, response);
+            FullHttpRequest request = (FullHttpRequest)msg;
+            this.handleMap(ctx, request, request.uri());
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            this.exception(ctx, e);
         }
     }
 }

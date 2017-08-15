@@ -2,18 +2,18 @@ package com.hongshaohua.jtools.http.server;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * Created by Aska on 2017/6/19.
+ * Created by Aska on 2017/6/22.
  */
-public abstract class DefaultHttpHandlerJsonOrigin<REQUEST_DATA, RESPONSE_DATA> extends DefaultHttpHandlerJson<REQUEST_DATA, RESPONSE_DATA> {
+public class DefaultHttpHandlerMapOrigin extends DefaultHttpHandlerMap {
 
-    private final static Logger logger = LoggerFactory.getLogger(DefaultHttpHandlerJsonOrigin.class);
+    public DefaultHttpHandlerMapOrigin(DefaultHttpHandler... handlers) {
+        super(handlers);
+    }
 
-    public DefaultHttpHandlerJsonOrigin(String name) {
-        super(name);
+    public DefaultHttpHandlerMapOrigin(String name, DefaultHttpHandler... handlers) {
+        super(name, handlers);
     }
 
     @Override

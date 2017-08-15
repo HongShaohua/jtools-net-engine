@@ -7,8 +7,6 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public interface ChannelReadHandler {
 
-    public void handle(ChannelHandlerContext ctx, Object msg);
-
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause);
+    public void channelRead(ChannelHandlerContext ctx, Object msg);
 
 }
