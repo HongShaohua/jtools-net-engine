@@ -1,12 +1,24 @@
 package com.hongshaohua.jtools.http.client;
 
 import org.apache.http.Header;
+import org.apache.http.HttpHost;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.DnsResolver;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContexts;
 
+import javax.net.ssl.SSLContext;
+import java.io.IOException;
+import java.net.*;
 import java.util.List;
 
 /**
@@ -61,10 +73,73 @@ public class DefaultHttpClient extends HttpClientEx {
     }
 
     private PoolingHttpClientConnectionManager connectionManager() {
-        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+        PoolingHttpClientConnectionManager cm = null;
+
+        if(this.proxy()) {
+            //需要设置代理
+            Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
+                    .register("http", new ProxyConnectionSocketFactory())
+                    .register("https", new ProxySSLConnectionSocketFactory(SSLContexts.createSystemDefault()))
+                    .build();
+            cm = new PoolingHttpClientConnectionManager(reg, new FakeDnsResolver());
+        } else {
+            cm = new PoolingHttpClientConnectionManager();
+        }
+
         cm.setMaxTotal(this.connectionCount);
         cm.setDefaultMaxPerRoute(this.connectionCount);
         return cm;
+    }
+
+    static class FakeDnsResolver implements DnsResolver {
+        @Override
+        public InetAddress[] resolve(String host) throws UnknownHostException {
+            // Return some fake DNS record for every request, we won't be using it
+            return new InetAddress[] { InetAddress.getByAddress(new byte[] { 1, 1, 1, 1 }) };
+        }
+    }
+
+    static class ProxyConnectionSocketFactory extends PlainConnectionSocketFactory {
+        @Override
+        public Socket createSocket(final HttpContext context) throws IOException {
+            InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
+            Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+            return new Socket(proxy);
+        }
+
+        @Override
+        public Socket connectSocket(int connectTimeout, Socket socket, HttpHost host, InetSocketAddress remoteAddress,
+                                    InetSocketAddress localAddress, HttpContext context) throws IOException {
+            // Convert address to unresolved
+            InetSocketAddress unresolvedRemote = InetSocketAddress
+                    .createUnresolved(host.getHostName(), remoteAddress.getPort());
+            return super.connectSocket(connectTimeout, socket, host, unresolvedRemote, localAddress, context);
+        }
+    }
+
+    static class ProxySSLConnectionSocketFactory extends SSLConnectionSocketFactory {
+
+        public ProxySSLConnectionSocketFactory(final SSLContext sslContext) {
+            // You may need this verifier if target site's certificate is not secure
+            //super(sslContext, ALLOW_ALL_HOSTNAME_VERIFIER);
+            super(sslContext);
+        }
+
+        @Override
+        public Socket createSocket(final HttpContext context) throws IOException {
+            InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
+            Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+            return new Socket(proxy);
+        }
+
+        @Override
+        public Socket connectSocket(int connectTimeout, Socket socket, HttpHost host, InetSocketAddress remoteAddress,
+                                    InetSocketAddress localAddress, HttpContext context) throws IOException {
+            // Convert address to unresolved
+            InetSocketAddress unresolvedRemote = InetSocketAddress
+                    .createUnresolved(host.getHostName(), remoteAddress.getPort());
+            return super.connectSocket(connectTimeout, socket, host, unresolvedRemote, localAddress, context);
+        }
     }
 
     public boolean open() {
