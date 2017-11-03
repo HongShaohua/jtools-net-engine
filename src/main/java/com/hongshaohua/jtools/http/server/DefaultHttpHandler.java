@@ -41,28 +41,14 @@ public abstract class DefaultHttpHandler implements ChannelReadHandler {
         return request.headers().get("ORIGINAL-IP");
     }
 
-    protected String getContentFromRequest(FullHttpRequest request) throws Exception {
-        return request.content().toString(CharsetUtil.UTF_8);
-    }
-
-    protected FullHttpResponse createResponse(HttpResponseStatus status, String content) throws Exception {
+    protected FullHttpResponse createResponse(HttpResponseStatus status) throws Exception {
         FullHttpResponse response = new DefaultFullHttpResponse(
                 HttpVersion.HTTP_1_1,
                 status,
-                Unpooled.wrappedBuffer(content.getBytes(CharsetUtil.UTF_8)));
+                Unpooled.wrappedBuffer("".getBytes(CharsetUtil.UTF_8)));
         response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
         response.headers().set(HttpHeaderNames.CONTENT_LENGTH, response.content().readableBytes());
         return response;
-    }
-
-    protected FullHttpResponse createResponse(String res) throws Exception {
-        return this.createResponse(HttpResponseStatus.OK, res);
-    }
-
-    protected FullHttpResponse createResponse(HttpResponseStatus status) throws Exception {
-        return this.createResponse(
-                status,
-                "");
     }
 
     protected void handleBefore(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
