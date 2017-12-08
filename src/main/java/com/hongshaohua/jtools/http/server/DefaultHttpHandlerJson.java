@@ -31,6 +31,14 @@ public abstract class DefaultHttpHandlerJson<REQUEST_DATA, RESPONSE_DATA> extend
         this.responseDataClass = (Class<RESPONSE_DATA>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
+    protected Class<REQUEST_DATA> getRequestDataClass() {
+        return requestDataClass;
+    }
+
+    protected Class<RESPONSE_DATA> getResponseDataClass() {
+        return responseDataClass;
+    }
+
     protected REQUEST_DATA str2RequestData(String str) throws Exception {
         return JsonUtils.json2Obj(str, this.requestDataClass);
     }
