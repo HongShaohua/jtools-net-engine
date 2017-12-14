@@ -22,8 +22,8 @@ public class HttpClientEx {
 
     private CloseableHttpClient httpClient = null;
 
-    private String proxyHost;
-    private int proxyPort;
+    private String proxyHost = "";
+    private int proxyPort = 0;
 
     public HttpClientEx() {
     }
