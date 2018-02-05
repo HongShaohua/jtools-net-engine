@@ -9,12 +9,13 @@ import io.netty.handler.codec.MessageToByteEncoder;
  */
 public class TcpServerEncoder<T> extends MessageToByteEncoder<T> {
 
-    private TcpServerHandler<T> handler;
+    private TcpServerHandler handler;
 
     public TcpServerEncoder(TcpServerHandler handler) {
         this.handler = handler;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void encode(ChannelHandlerContext ctx, T msg, ByteBuf out) throws Exception {
         //编码
