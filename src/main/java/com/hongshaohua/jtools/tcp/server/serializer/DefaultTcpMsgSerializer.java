@@ -384,6 +384,7 @@ public class DefaultTcpMsgSerializer {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     private boolean writeMap(ByteBuf buf, Object object, ReflectDataClass clazz) throws Exception {
         if(clazz.isMap()
                 || clazz.isHashMap()

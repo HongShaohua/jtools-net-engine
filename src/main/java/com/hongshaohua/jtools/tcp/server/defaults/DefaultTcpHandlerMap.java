@@ -54,6 +54,7 @@ public class DefaultTcpHandlerMap extends DefaultTcpHandler<DefaultTcpMsg> {
         return (DefaultTcpMsg)handler.deserialize(ctx, buf);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void received(ChannelHandlerContext ctx, DefaultTcpMsg msg) throws Exception {
         int id = msg.getId();
@@ -65,6 +66,7 @@ public class DefaultTcpHandlerMap extends DefaultTcpHandler<DefaultTcpMsg> {
         handler.received(ctx, msg);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected ByteBuf serialize(ChannelHandlerContext ctx, DefaultTcpMsg msg) throws Exception {
         int id = msg.getId();

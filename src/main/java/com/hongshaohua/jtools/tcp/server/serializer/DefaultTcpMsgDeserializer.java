@@ -410,6 +410,7 @@ public class DefaultTcpMsgDeserializer {
         return res;
     }
 
+    @SuppressWarnings("unchecked")
     private Result readList(ByteBuf buf, ReflectDataClass clazz) throws Exception {
         Result res = new Result();
         //判断是否为List
@@ -445,6 +446,7 @@ public class DefaultTcpMsgDeserializer {
         return res;
     }
 
+    @SuppressWarnings("unchecked")
     private Result readSet(ByteBuf buf, ReflectDataClass clazz) throws Exception {
         Result res = new Result();
         //判断是否为Set
@@ -483,6 +485,7 @@ public class DefaultTcpMsgDeserializer {
         return res;
     }
 
+    @SuppressWarnings("unchecked")
     private Result readMap(ByteBuf buf, ReflectDataClass clazz) throws Exception {
         Result res = new Result();
         //判断是否为Map
