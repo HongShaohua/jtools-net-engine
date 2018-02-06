@@ -44,8 +44,8 @@ public class TcpServer {
         this(boss, 0, executor);
     }
 
-    public ChannelFuture bind(int port, TcpServerHandler handler) {
-        this.serverBootstrap.childHandler(new TcpServerInitializer(handler));
+    public ChannelFuture bind(int port, TcpServerInitializer initializer) {
+        this.serverBootstrap.childHandler(new TcpServerChannelInitializer(initializer));
         return this.serverBootstrap.bind(port);
     }
 }

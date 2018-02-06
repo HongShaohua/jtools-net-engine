@@ -8,10 +8,6 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public interface TcpServerHandler<T> {
 
-    public TcpServerDecoder newDecoder();
-
-    public TcpServerEncoder<T> newEncoder();
-
     /**建立连接*/
     public void connect(ChannelHandlerContext ctx) throws Exception;
 

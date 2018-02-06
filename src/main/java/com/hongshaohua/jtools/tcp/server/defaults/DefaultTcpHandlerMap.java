@@ -1,7 +1,5 @@
 package com.hongshaohua.jtools.tcp.server.defaults;
 
-import com.hongshaohua.jtools.tcp.server.TcpServerDecoder;
-import com.hongshaohua.jtools.tcp.server.TcpServerEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
@@ -32,20 +30,26 @@ public class DefaultTcpHandlerMap extends DefaultTcpHandler<DefaultTcpMsg> {
         }
     }
 
-    @Override
-    public TcpServerDecoder newDecoder() {
-        return new TcpServerDecoder(this);
+    public Map<Integer, DefaultTcpHandlerMsg> getRecvHandlers() {
+        return recvHandlers;
     }
 
-    @Override
-    public TcpServerEncoder<DefaultTcpMsg> newEncoder() {
-        return new DefaultTcpMsgEncoder<>(this);
+    public void setRecvHandlers(Map<Integer, DefaultTcpHandlerMsg> recvHandlers) {
+        this.recvHandlers = recvHandlers;
+    }
+
+    public Map<Integer, DefaultTcpHandlerMsg> getSendHandlers() {
+        return sendHandlers;
+    }
+
+    public void setSendHandlers(Map<Integer, DefaultTcpHandlerMsg> sendHandlers) {
+        this.sendHandlers = sendHandlers;
     }
 
     @Override
     protected DefaultTcpMsg deserialize(ChannelHandlerContext ctx, ByteBuf buf) throws Exception {
         //buf第一个int为len，第二个int为id
-        int id = buf.getInt(INT_SIZE * 2);
+        int id = buf.getInt(INT_SIZE);
         DefaultTcpHandlerMsg handler = this.recvHandlers.get(id);
         if(handler == null) {
             logger.error("deserialize handler error, id: " + id + " not exists");

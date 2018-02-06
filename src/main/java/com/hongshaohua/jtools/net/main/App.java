@@ -2,8 +2,13 @@ package com.hongshaohua.jtools.net.main;
 
 import com.hongshaohua.jtools.common.reflect.ReflectDataClass;
 import com.hongshaohua.jtools.tcp.server.TcpServer;
+import com.hongshaohua.jtools.tcp.server.defaults.DefaultTcpHandlerMap;
+import com.hongshaohua.jtools.tcp.server.defaults.DefaultTcpHandlerMapInitializer;
+import com.hongshaohua.jtools.tcp.server.defaults.DefaultTcpHandlerMsg;
+import org.apache.log4j.xml.DOMConfigurator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Hello world!
@@ -14,14 +19,20 @@ public class App
 
     public static void main(String[] args )
     {
+        DOMConfigurator.configure("log4j.xml");
         try {
             int boss = 1;
             int work = 4;
-            MyHandler handler = new MyHandler();
+            MyHandler handler = new MyHandler(1);
+            List<DefaultTcpHandlerMsg> recvHandler = new ArrayList<>();
+            recvHandler.add(handler);
+            List<DefaultTcpHandlerMsg> sendHandler = new ArrayList<>();
+
+            DefaultTcpHandlerMap handlerMap = new DefaultTcpHandlerMap(recvHandler, sendHandler);
 
 
             TcpServer tcpServer = new TcpServer(boss, work, null);
-            tcpServer.bind(10910, handler);
+            tcpServer.bind(10910, new DefaultTcpHandlerMapInitializer(handlerMap));
 
             //Thread.sleep(1000000000);
 

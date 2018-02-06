@@ -1,12 +1,15 @@
 package com.hongshaohua.jtools.tcp.server.defaults;
 
 import com.hongshaohua.jtools.common.reflect.ReflectDataClass;
+import com.hongshaohua.jtools.tcp.server.serializer.DefaultTcpMsgDeserializer;
+import com.hongshaohua.jtools.tcp.server.serializer.DefaultTcpMsgSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.ParameterizedType;
+import java.nio.charset.Charset;
 
 /**
  * Created by Aska on 2018/2/5.
@@ -36,17 +39,19 @@ public abstract class DefaultTcpHandlerMsgAutoWrite<T extends DefaultTcpMsg> ext
     }
 
     private void parseGenericClass() {
-        Class childClass = this.getChildClass();
+        //Class childClass = this.getChildClass();
+        Class childClass = this.getClass();
         this.genericClass = ReflectDataClass.parseClass(((ParameterizedType)(childClass.getGenericSuperclass())).getActualTypeArguments()[0]);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected T deserialize(ChannelHandlerContext ctx, ByteBuf buf) throws Exception {
-        return null;
+        return (T)DefaultTcpMsgDeserializer.deserialize(buf, this.genericClass, Charset.forName("UTF-8"));
     }
 
     @Override
     protected ByteBuf serialize(ChannelHandlerContext ctx, T msg) throws Exception {
-        return null;
+        return DefaultTcpMsgSerializer.serialize(msg, this.genericClass, Charset.forName("UTF-8"));
     }
 }
