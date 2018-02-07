@@ -28,7 +28,7 @@ public class App
             recvHandler.add(handler);
             List<DefaultTcpHandlerMsg> sendHandler = new ArrayList<>();
 
-            DefaultTcpHandlerMap handlerMap = new DefaultTcpHandlerMap(recvHandler, sendHandler);
+            DefaultTcpHandlerMap handlerMap = new DefaultTcpHandlerMap(new MyListener(), recvHandler, sendHandler);
 
 
             TcpServer tcpServer = new TcpServer(boss, work, null);

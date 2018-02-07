@@ -16,10 +16,12 @@ public class DefaultTcpHandlerMap extends DefaultTcpHandler<DefaultTcpMsg> {
 
     private final static Logger logger = LoggerFactory.getLogger(DefaultTcpHandlerMap.class);
 
+    private DefaultTcpHandlerMapListener listener;
     private Map<Integer, DefaultTcpHandlerMsg> recvHandlers;
     private Map<Integer, DefaultTcpHandlerMsg> sendHandlers;
 
-    public DefaultTcpHandlerMap(List<DefaultTcpHandlerMsg> recvHandlers, List<DefaultTcpHandlerMsg> sendHandlers) {
+    public DefaultTcpHandlerMap(DefaultTcpHandlerMapListener listener, List<DefaultTcpHandlerMsg> recvHandlers, List<DefaultTcpHandlerMsg> sendHandlers) {
+        this.listener = listener;
         this.recvHandlers = new HashMap<>();
         for(DefaultTcpHandlerMsg recvHandler : recvHandlers) {
             this.recvHandlers.put(recvHandler.getId(), recvHandler);
@@ -44,6 +46,12 @@ public class DefaultTcpHandlerMap extends DefaultTcpHandler<DefaultTcpMsg> {
 
     public void setSendHandlers(Map<Integer, DefaultTcpHandlerMsg> sendHandlers) {
         this.sendHandlers = sendHandlers;
+    }
+
+    @Override
+    public void connect(ChannelHandlerContext ctx) throws Exception {
+        super.connect(ctx);
+        this.listener.connect(ctx);
     }
 
     @Override
@@ -80,5 +88,17 @@ public class DefaultTcpHandlerMap extends DefaultTcpHandler<DefaultTcpMsg> {
             return null;
         }
         return handler.serialize(ctx, msg);
+    }
+
+    @Override
+    public void disconnect(ChannelHandlerContext ctx) throws Exception {
+        super.disconnect(ctx);
+        this.listener.disconnect(ctx);
+    }
+
+    @Override
+    public void exception(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exception(ctx, cause);
+        this.listener.exception(ctx, cause);
     }
 }
