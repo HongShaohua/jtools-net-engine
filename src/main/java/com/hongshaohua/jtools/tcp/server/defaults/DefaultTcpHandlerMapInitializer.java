@@ -11,23 +11,19 @@ import com.hongshaohua.jtools.tcp.server.TcpServerInitializer;
 public class DefaultTcpHandlerMapInitializer implements TcpServerInitializer {
 
     private DefaultTcpHandlerMap handlerMap;
-    private TcpServerDecoder decoder;
-    private DefaultTcpHandlerMapEncoder encoder;
 
     public DefaultTcpHandlerMapInitializer(DefaultTcpHandlerMap handlerMap) {
         this.handlerMap = handlerMap;
-        this.decoder = new TcpServerDecoder(this.handlerMap);
-        this.encoder = new DefaultTcpHandlerMapEncoder(this.handlerMap);
     }
 
     @Override
     public TcpServerDecoder decoder() {
-        return this.decoder;
+        return new TcpServerDecoder(this.handlerMap);
     }
 
     @Override
     public TcpServerEncoder<DefaultTcpMsg> encoder() {
-        return this.encoder;
+        return new DefaultTcpHandlerMapEncoder(this.handlerMap);
     }
 
     @Override
