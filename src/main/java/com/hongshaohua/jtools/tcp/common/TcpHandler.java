@@ -1,4 +1,4 @@
-package com.hongshaohua.jtools.tcp.server;
+package com.hongshaohua.jtools.tcp.common;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -6,7 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 /**
  * Created by Aska on 2018/1/30.
  */
-public interface TcpServerHandler<T> {
+public interface TcpHandler<T> {
 
     /**建立连接*/
     public void connect(ChannelHandlerContext ctx) throws Exception;

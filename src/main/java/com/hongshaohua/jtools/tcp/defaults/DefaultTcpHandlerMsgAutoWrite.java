@@ -1,8 +1,8 @@
-package com.hongshaohua.jtools.tcp.server.defaults;
+package com.hongshaohua.jtools.tcp.defaults;
 
 import com.hongshaohua.jtools.common.reflect.ReflectDataClass;
-import com.hongshaohua.jtools.tcp.server.serializer.DefaultTcpMsgDeserializer;
-import com.hongshaohua.jtools.tcp.server.serializer.DefaultTcpMsgSerializer;
+import com.hongshaohua.jtools.tcp.serializer.DefaultTcpMsgDeserializer;
+import com.hongshaohua.jtools.tcp.serializer.DefaultTcpMsgSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;

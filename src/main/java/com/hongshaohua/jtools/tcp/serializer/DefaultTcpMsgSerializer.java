@@ -1,4 +1,4 @@
-package com.hongshaohua.jtools.tcp.server.serializer;
+package com.hongshaohua.jtools.tcp.serializer;
 
 import com.hongshaohua.jtools.common.reflect.ReflectDataClass;
 import com.hongshaohua.jtools.common.reflect.ReflectDataField;

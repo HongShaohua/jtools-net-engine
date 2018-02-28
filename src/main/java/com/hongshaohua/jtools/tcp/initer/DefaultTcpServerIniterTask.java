@@ -1,8 +1,8 @@
-package com.hongshaohua.jtools.tcp.server.initer;
+package com.hongshaohua.jtools.tcp.initer;
 
 import com.hongshaohua.jtools.common.initer.IniterTaskTemplate;
 import com.hongshaohua.jtools.tcp.server.TcpServer;
-import com.hongshaohua.jtools.tcp.server.defaults.DefaultTcpHandlerMapInitializer;
+import com.hongshaohua.jtools.tcp.defaults.DefaultTcpHandlerMapInitializer;
 
 import java.util.Iterator;
 import java.util.Map;

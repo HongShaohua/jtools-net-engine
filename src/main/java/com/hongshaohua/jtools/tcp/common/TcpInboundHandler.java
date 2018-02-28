@@ -1,4 +1,4 @@
-package com.hongshaohua.jtools.tcp.server;
+package com.hongshaohua.jtools.tcp.common;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -6,11 +6,11 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 /**
  * Created by Aska on 2018/1/31.
  */
-public class TcpServerInboundHandler extends ChannelInboundHandlerAdapter {
+public class TcpInboundHandler extends ChannelInboundHandlerAdapter {
 
-    private TcpServerHandler handler;
+    private TcpHandler handler;
 
-    public TcpServerInboundHandler(TcpServerHandler handler) {
+    public TcpInboundHandler(TcpHandler handler) {
         this.handler = handler;
     }
 

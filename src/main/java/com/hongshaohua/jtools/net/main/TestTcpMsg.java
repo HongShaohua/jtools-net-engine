@@ -1,6 +1,6 @@
 package com.hongshaohua.jtools.net.main;
 
-import com.hongshaohua.jtools.tcp.server.defaults.DefaultTcpMsg;
+import com.hongshaohua.jtools.tcp.defaults.DefaultTcpMsg;
 
 /**
  * Created by Aska on 2018/2/5.

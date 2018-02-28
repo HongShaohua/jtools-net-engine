@@ -1,4 +1,4 @@
-package com.hongshaohua.jtools.tcp.server;
+package com.hongshaohua.jtools.tcp.common;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,11 +7,11 @@ import io.netty.handler.codec.MessageToByteEncoder;
 /**
  * Created by Aska on 2018/1/31.
  */
-public class TcpServerEncoder<T> extends MessageToByteEncoder<T> {
+public class TcpEncoder<T> extends MessageToByteEncoder<T> {
 
-    private TcpServerHandler<T> handler;
+    private TcpHandler<T> handler;
 
-    public TcpServerEncoder(TcpServerHandler<T> handler) {
+    public TcpEncoder(TcpHandler<T> handler) {
         this.handler = handler;
     }
 

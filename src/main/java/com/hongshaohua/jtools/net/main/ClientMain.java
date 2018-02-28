@@ -1,20 +1,25 @@
 package com.hongshaohua.jtools.net.main;
 
 import com.hongshaohua.jtools.common.reflect.ReflectDataClass;
+import com.hongshaohua.jtools.tcp.client.TcpClient;
+import com.hongshaohua.jtools.tcp.defaults.DefaultTcpHandlerMap;
+import com.hongshaohua.jtools.tcp.defaults.DefaultTcpHandlerMapInitializer;
+import com.hongshaohua.jtools.tcp.defaults.DefaultTcpHandlerMsg;
 import org.apache.log4j.xml.DOMConfigurator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Hello world!
- *
+ * Created by Aska on 2018/2/12.
  */
-public class App 
-{
+public class ClientMain {
 
     public static void main(String[] args )
     {
         DOMConfigurator.configure("log4j.xml");
+
+        TcpClient tcpClient = newTcpClient();
         try {
 
             //new DefaultAutoW(1);
@@ -52,5 +57,20 @@ public class App
 
 
         System.out.println( "Hello World!" );
+    }
+
+    private static TcpClient newTcpClient() {
+        int work = 1;
+        MyHandler handler = new MyHandler(1, "client");
+        List<DefaultTcpHandlerMsg> recvHandler = new ArrayList<>();
+        recvHandler.add(handler);
+        List<DefaultTcpHandlerMsg> sendHandler = new ArrayList<>();
+
+        DefaultTcpHandlerMap handlerMap = new DefaultTcpHandlerMap(new MyListener("client"), recvHandler, sendHandler);
+
+
+        TcpClient tcpClient = new TcpClient(work);
+        tcpClient.connect("127.0.0.1", 10910, new DefaultTcpHandlerMapInitializer(handlerMap));
+        return tcpClient;
     }
 }

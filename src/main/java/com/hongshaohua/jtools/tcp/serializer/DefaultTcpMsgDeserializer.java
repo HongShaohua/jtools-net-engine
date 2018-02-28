@@ -1,4 +1,4 @@
-package com.hongshaohua.jtools.tcp.server.serializer;
+package com.hongshaohua.jtools.tcp.serializer;
 
 import com.google.gson.internal.LinkedHashTreeMap;
 import com.hongshaohua.jtools.common.reflect.ReflectDataClass;

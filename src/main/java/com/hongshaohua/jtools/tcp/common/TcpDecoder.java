@@ -1,4 +1,4 @@
-package com.hongshaohua.jtools.tcp.server;
+package com.hongshaohua.jtools.tcp.common;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * Created by Aska on 2018/1/31.
  */
-public class TcpServerDecoder extends ByteToMessageDecoder {
+public class TcpDecoder extends ByteToMessageDecoder {
 
-    private TcpServerHandler handler;
+    private TcpHandler handler;
 
-    public TcpServerDecoder(TcpServerHandler handler) {
+    public TcpDecoder(TcpHandler handler) {
         this.handler = handler;
     }
 

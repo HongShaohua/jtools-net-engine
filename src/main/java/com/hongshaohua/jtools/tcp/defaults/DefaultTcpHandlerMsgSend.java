@@ -1,4 +1,4 @@
-package com.hongshaohua.jtools.tcp.server.defaults;
+package com.hongshaohua.jtools.tcp.defaults;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

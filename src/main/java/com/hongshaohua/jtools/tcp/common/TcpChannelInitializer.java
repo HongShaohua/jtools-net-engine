@@ -1,4 +1,4 @@
-package com.hongshaohua.jtools.tcp.server;
+package com.hongshaohua.jtools.tcp.common;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -6,11 +6,11 @@ import io.netty.channel.socket.SocketChannel;
 /**
  * Created by Aska on 2018/1/31.
  */
-public class TcpServerChannelInitializer extends ChannelInitializer<SocketChannel> {
+public class TcpChannelInitializer extends ChannelInitializer<SocketChannel> {
 
-    private TcpServerInitializer initializer;
+    private TcpInitializer initializer;
 
-    public TcpServerChannelInitializer(TcpServerInitializer initializer) {
+    public TcpChannelInitializer(TcpInitializer initializer) {
         this.initializer = initializer;
     }
 
@@ -19,6 +19,6 @@ public class TcpServerChannelInitializer extends ChannelInitializer<SocketChanne
         //每次有新连接都会触发init
         ch.pipeline().addLast(this.initializer.decoder());
         ch.pipeline().addLast(this.initializer.encoder());
-        ch.pipeline().addLast(new TcpServerInboundHandler(this.initializer.handler()));
+        ch.pipeline().addLast(new TcpInboundHandler(this.initializer.handler()));
     }
 }

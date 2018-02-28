@@ -1,6 +1,6 @@
 package com.hongshaohua.jtools.net.main;
 
-import com.hongshaohua.jtools.tcp.server.defaults.DefaultTcpHandlerMsgAutoWriteRecv;
+import com.hongshaohua.jtools.tcp.defaults.DefaultTcpHandlerMsgAutoWriteRecv;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
@@ -8,8 +8,11 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public class MyHandler extends DefaultTcpHandlerMsgAutoWriteRecv<MyMsg> {
 
-    public MyHandler(int id) {
+    private String name;
+
+    public MyHandler(int id, String name) {
         super(id);
+        this.name = name;
     }
 
     @Override

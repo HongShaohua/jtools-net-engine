@@ -1,6 +1,6 @@
-package com.hongshaohua.jtools.tcp.server.defaults;
+package com.hongshaohua.jtools.tcp.defaults;
 
-import com.hongshaohua.jtools.tcp.server.TcpServerHandler;
+import com.hongshaohua.jtools.tcp.common.TcpHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Aska on 2018/2/5.
  */
-public abstract class DefaultTcpHandler<T> implements TcpServerHandler<T> {
+public abstract class DefaultTcpHandler<T> implements TcpHandler<T> {
 
     private final static Logger logger = LoggerFactory.getLogger(DefaultTcpHandler.class);
 

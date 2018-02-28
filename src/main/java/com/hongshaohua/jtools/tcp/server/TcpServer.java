@@ -1,5 +1,7 @@
 package com.hongshaohua.jtools.tcp.server;
 
+import com.hongshaohua.jtools.tcp.common.TcpChannelInitializer;
+import com.hongshaohua.jtools.tcp.common.TcpInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -44,8 +46,8 @@ public class TcpServer {
         this(boss, 0, executor);
     }
 
-    public ChannelFuture bind(int port, TcpServerInitializer initializer) {
-        this.serverBootstrap.childHandler(new TcpServerChannelInitializer(initializer));
+    public ChannelFuture bind(int port, TcpInitializer initializer) {
+        this.serverBootstrap.childHandler(new TcpChannelInitializer(initializer));
         return this.serverBootstrap.bind(port);
     }
 }

@@ -1,4 +1,4 @@
-package com.hongshaohua.jtools.tcp.server.defaults;
+package com.hongshaohua.jtools.tcp.defaults;
 
 /**
  * Created by Aska on 2018/1/31.
